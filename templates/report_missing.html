@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Missing Person</title>
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            text-align: left;
+            margin: 20px;
+        }
+
+        .header button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .header button:hover {
+            background-color: #45a049;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .instruction-text {
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        input[type="file"] {
+            padding: 5px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Preview image styling */
+        #preview {
+            display: block;
+            margin-top: 10px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer Contact Section */
+        .contact-section {
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            position: relative; /* Keep the section fixed at the bottom */
+            bottom: 0; /* Position at the bottom of the screen */
+            width: 100%; /* Ensure the section spans the entire width */
+        }
+
+
+        .contact-section h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .contact-section p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .contact-info div {
+            text-align: center;
+            width: 30%;
+        }
+
+        .contact-info img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .contact-info p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .open-form-btn {
+            display: block; 
+            margin: 40px auto;
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 200px;
+            text-align: center; 
+        }
+
+        .open-form-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Back Button */
+        /* .back-btn {
+            display: none;
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            text-align: center;
+            width: 200px;
+        } */
+
+        /* .back-btn:hover {
+            background-color: #45a049;
+        } */
+
+        /* Form Section */
+        .report-form {
+            display: none;
+        }
+    </style>
+    <script>
+        // Function to toggle the visibility of the form
+        function openForm() {
+            document.querySelector('.report-form').style.display = 'block';
+            document.querySelector('.open-form-btn').style.display = 'none';
+            document.querySelector('.instruction-text').style.display = 'none'; // Hide the instruction text when the form is opened
+        }
+
+        // Function to handle image preview
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <!-- Header with Home Button -->
+    <div class="header">
+        <button onclick="window.location.href='/'">Home</button>
+    </div>
+
+    <div class="container">
+        <!-- Welcome and Instructions Section -->
+        <h1>Report Missing Person</h1>
+        <p class="instruction-text">
+            Welcome to the Missing Person Reporting System! To report a missing person, please click the button below and fill in the necessary details.
+        </p>
+        
+        <!-- Form Button to Open the Report Form -->
+        <button class="open-form-btn" onclick="openForm()">Open Report Form</button>
+
+        <!-- Report Form Section -->
+        <div class="report-form">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="full_name">Full Name:</label>
+                    <input type="text" id="full_name" name="full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="text" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="missing_full_name">Missing Person Full Name:</label>
+                    <input type="text" id="missing_full_name" name="missing_full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="missing_age">Missing Person Age:</label>
+                    <input type="number" id="missing_age" name="missing_age" required>
+                </div>
+                <div class="form-group">
+                    <label for="missing_pic">Missing Person Picture:</label>
+                    <input type="file" id="missing_pic" name="missing_pic" accept="image/*" onchange="previewImage(event)">
+                    <img id="preview" style="display: none;" alt="Image Preview">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4"></textarea>
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer Contact Section -->
+    <div class="contact-section">
+        <h2>Contact Us</h2>
+        <p>If you need assistance, feel free to contact one of our team members.</p>
+
+        <div class="contact-info">
+            <div>
+                <img src="https://th.bing.com/th/id/R.2304cc944d215c6c697d07012f1fdbe5?rik=MmevkJnT7xovqw&riu=http%3a%2f%2fimage.shutterstock.com%2fz%2fstock-photo-police-officer-369187457.jpg&ehk=RlnxHcCt3ze9rDBdRmstlvZ99rtKdB%2biFkwdaEWuWpE%3d&risl=&pid=ImgRaw&r=0" alt="Person 1">
+                <p>John Doe</p>
+                <p>Email: john.doe@example.com</p>
+                <p>Phone: +123 456 7890</p>
+            </div>
+            <div>
+                <img src="https://as1.ftcdn.net/v2/jpg/00/52/80/44/1000_F_52804439_H940sJEv6XIs1fx0JPN8zB7jUYj0fNYn.jpg" alt="Person 2">
+                <p>Jane Smith</p>
+                <p>Email: jane.smith@example.com</p>
+                <p>Phone: +123 456 7891</p>
+            </div>
+            <div>
+                <img src="https://freerangestock.com/sample/88698/police-officer.jpg" alt="Person 3">
+                <p>Bob Johnson</p>
+                <p>Email: bob.johnson@example.com</p>
+                <p>Phone: +123 456 7892</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
