@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Drone Detection</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Global styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fb;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        input[type="submit"] {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        img, video {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .notifications {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .notifications h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .notifications ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .notifications ul li {
+            background-color: #e9f7ec;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .detection-message {
+            color: #ff9900;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin - Pannel</h1>
+        <form method="POST" enctype="multipart/form-data" action="/admin/upload">
+            <input type="file" name="file" accept="image/*,video/*" required>
+            <input type="submit" value="Upload and Detect">
+        </form>
+
+        {% if uploaded_file %}
+            <h3>Uploaded File:</h3>
+            {% if uploaded_file.endswith(('.mp4', '.avi', '.mov')) %}
+                <video controls>
+                    <source src="{{ url_for('static', filename='uploads/' + uploaded_file) }}" type="video/mp4">
+                </video>
+            {% else %}
+                <img src="{{ url_for('static', filename='uploads/' + uploaded_file) }}" alt="Uploaded Image">
+            {% endif %}
+        {% endif %}
+
+        {% if result_file %}
+            <h3>Detection Result:</h3>
+            {% if result_file.endswith(('.mp4', '.avi', '.mov')) %}
+                <video controls>
+                    <source src="{{ url_for('static', filename='results/' + result_file) }}" type="video/mp4">
+                </video>
+            {% else %}
+                <img src="{{ url_for('static', filename='results/' + result_file) }}" alt="Detection Result">
+            {% endif %}
+            {% if person_detected %}
+                <p class="detection-message">Person detected with confidence > 30%!</p>
+                <a href="{{ url_for('send_notification', email=user_email) }}" class="btn">Send Email Notification</a>
+            {% else %}
+                <p>No person detected with confidence > 30%.</p>
+            {% endif %}
+        {% endif %}
+
+        {% if notifications %}
+            <div class="notifications">
+                <h3>Notifications</h3>
+                <ul>
+                    {% for notification in notifications %}
+                        <li>{{ notification }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
